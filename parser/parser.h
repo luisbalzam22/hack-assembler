@@ -1,4 +1,5 @@
 typedef enum {
+    LABEL,
     A_INSTRUCTION,
     C_INSTRUCTION,
     END_OF_FILE
@@ -13,6 +14,7 @@ typedef struct {
 typedef union {
     c_instruction_fields instruction_fields;
     char* address;
+    char* label;
 } instruction_body;
 
 typedef struct {

@@ -24,14 +24,27 @@ parsed_line get_next_line(FILE* in_stream, parsed_line* instruction){
     // this would also work:
     // int parsed = fscanf(in_stream, "%99[^/\n ;{}`~.!#$\\%]", line);
     // if (parsed && parsed != EOF)
-    int is_parsed;
-    while ((is_parsed = fscanf(in_stream, "%99[^/\n {}`~.!#$\\%]", line))) {
-        is_parsed = fscanf(in_stream, "%99[^/\n {}`~.!#$\\%]", line);
-                   fprintf(stdout, "The  line: %d\n", is_parsed);
-    }
+    int is_parsed = fscanf(in_stream, "%99[^\n {}`~.!#$\\%/]", line);
+    
     if (is_parsed != EOF) {
+
+    while (!(fscanf(in_stream, "%99[^\n {}`~.!#$\\%/]", line))) {
+        // scanning past empty lines
+        fscanf(in_stream, "%99[ \n]", line);
+
+        // scanning past comments
+        fscanf(in_stream, "%99[/\n]+", line);
+        if(strstr(line,"//")){
+            fscanf(in_stream, "%99[^\n]+", line); // comment's text
+        }
+    }
         strcpy(line_copy, line);
-        if (strstr(line, "@"))
+
+        if (strstr(line, "(")){
+            instruction->current_line_metadata = LABEL;
+            instruction->body.label = strtok(line_copy + 1 ,")");
+        }
+        else if (strstr(line, "@"))
         {
             instruction->current_line_metadata = A_INSTRUCTION;
             instruction->body.address = line + 1; // memory address from the 2d character & on
@@ -41,9 +54,6 @@ parsed_line get_next_line(FILE* in_stream, parsed_line* instruction){
             instruction->body.instruction_fields.dest = strtok(line_copy ,"=");
             instruction->body.instruction_fields.comp = strtok(NULL ,";");
             instruction->body.instruction_fields.jump = strchr(line, 'J');
-            fprintf(stdout, "The instruction's \"dest\" field: %s\n", instruction->body.instruction_fields.dest);
-            fprintf(stdout, "The instruction's \"comp\" field: %s\n", instruction->body.instruction_fields.comp);
-            fprintf(stdout, "The instruction's \"jump\" field: %s\n", instruction->body.instruction_fields.jump);
         }
         return *instruction;
     }

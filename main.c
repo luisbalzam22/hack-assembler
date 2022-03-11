@@ -7,6 +7,10 @@ int main(int argc, char *argv[])
 
     parsed_line line;
 
-    get_next_line(file, &line);
+    do {
+        get_next_line(file, &line);
+    } while (line.current_line_metadata != END_OF_FILE);
+
+    
     return 0;
 }
