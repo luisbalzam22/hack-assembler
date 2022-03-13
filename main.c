@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "./parser/parser.h"
+#include "./common/hashtable-manager.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -11,6 +13,7 @@ int main(int argc, char *argv[])
         get_next_line(file, &line);
     } while (line.current_line_metadata != END_OF_FILE);
 
-    
+    test_find_item();
+
     return 0;
 }
