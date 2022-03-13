@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
         get_next_line(file, &line);
     } while (line.current_line_metadata != END_OF_FILE);
 
-    test_find_item();
+    test_insert_item();
 
     return 0;
 }
