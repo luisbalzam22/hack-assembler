@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include "./hashtable-manager.h"
 
+// TODO: improve code implementation by using a struct with the array metadata, to avoid passing an "array_size" argument
+// TODO: change interface, to make it "Object-like", like the "translator" component
+
+
 // Takes search value (token), hash table, and the array size. Returns found item, or null
 hash_item* find_item(char* token, hash_item* hash_array[], unsigned int array_size){
     unsigned int hash = hash_func(token, array_size);

@@ -25,39 +25,42 @@ parsed_line get_next_line(FILE* in_stream, parsed_line* instruction){
     // int parsed = fscanf(in_stream, "%99[^/\n ;{}`~.!#$\\%]", line);
     // if (parsed && parsed != EOF)
     int is_parsed = fscanf(in_stream, "%99[^\n {}`~.!#$\\%/]", line);
-    
-    if (is_parsed != EOF) {
+    instruction->current_line_metadata.line_number = 0; // TODO: remove this later; it'll automatically set to 0 on "Construction" when moved to "object-like" code
+    if (is_parsed != EOF)
+    {
 
-    while (!(fscanf(in_stream, "%99[^\n {}`~.!#$\\%/]", line))) {
-        // scanning past empty lines
-        fscanf(in_stream, "%99[ \n]", line);
+        while (!(fscanf(in_stream, "%99[^\n {}`~.!#$\\%/]", line)))
+        {
+            // scanning past empty lines
+            fscanf(in_stream, "%99[ \n]", line);
 
-        // scanning past comments
-        fscanf(in_stream, "%99[/\n]+", line);
-        if(strstr(line,"//")){
-            fscanf(in_stream, "%99[^\n]+", line); // comment's text
+            // scanning past comments
+            fscanf(in_stream, "%99[/\n]+", line);
+            if (strstr(line, "//"))
+            {
+                fscanf(in_stream, "%99[^\n]+", line); // comment's text
+            }
         }
-    }
         strcpy(line_copy, line);
-
+        instruction->current_line_metadata.line_number++;
         if (strstr(line, "(")){
-            instruction->current_line_metadata = LABEL;
+            instruction->current_line_metadata.line_type = LABEL;
             instruction->body.label = strtok(line_copy + 1 ,")");
         }
         else if (strstr(line, "@"))
         {
-            instruction->current_line_metadata = A_INSTRUCTION;
+            instruction->current_line_metadata.line_type = A_INSTRUCTION;
             instruction->body.address = line + 1; // memory address from the 2d character & on
         }
         else {
-            instruction->current_line_metadata = C_INSTRUCTION;
+            instruction->current_line_metadata.line_type = C_INSTRUCTION;
             instruction->body.instruction_fields.dest = strtok(line_copy ,"=");
             instruction->body.instruction_fields.comp = strtok(NULL ,";");
             instruction->body.instruction_fields.jump = strchr(line, 'J');
         }
         return *instruction;
     }
-    instruction->current_line_metadata = END_OF_FILE;
+    instruction->current_line_metadata.line_type = END_OF_FILE;
     return *instruction;
 }
 

@@ -3,6 +3,11 @@ typedef enum {
     A_INSTRUCTION,
     C_INSTRUCTION,
     END_OF_FILE
+} scanned_line_type;
+
+typedef struct {
+    unsigned int line_number;
+    scanned_line_type line_type;
 } line_metadata;
 
 typedef struct {
