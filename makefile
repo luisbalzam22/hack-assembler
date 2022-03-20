@@ -1,8 +1,8 @@
 parser: ./parser/parser.c ./parser/parser.h
 	gcc -c ./parser/parser.c && mv parser.o ./parser/
 
-hashtable-manager: ./common/hashtable-manager/hashtable-manager.c ./common/hashtable-manager/hashtable-manager.h
-	gcc -c ./common/hashtable-manager/hashtable-manager.c && mv hashtable-manager.o ./common/hashtable-manager/
+hashtable: ./hashtable/hashtable.c ./hashtable/hashtable.h
+	gcc -c ./hashtable/hashtable.c && mv hashtable.o ./hashtable/
 
 translator: ./translator/translator.c ./translator/translator.h
 	gcc -c ./translator/translator.c && mv translator.o ./translator/
@@ -16,8 +16,8 @@ main: ./main.c ./main.h
 # assembler: main parser translator symbol
 # 	gcc ./main.o ./parser/parser.o ./translator/translator.o ./symbol/symbol.o -o assembler
 
-assembler: main parser hashtable-manager translator
-	gcc ./main.o ./parser/parser.o ./common/hashtable-manager/hashtable-manager.o ./translator/translator.o -o assembler
+assembler: main parser hashtable translator
+	gcc ./main.o ./parser/parser.o ./hashtable/hashtable.o ./translator/translator.o -o assembler
 
 # quickly run manual tests with example file
 example:

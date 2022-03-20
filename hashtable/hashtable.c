@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "./hashtable-manager.h"
+#include "./hashtable.h"
 
 // TODO: improve code implementation by using a struct with the array metadata, to avoid passing an "array_size" argument
 // TODO: change interface, to make it "Object-like", like the "translator" component
