@@ -16,7 +16,7 @@ main: ./main.c ./main.h
 # assembler: main parser translator symbol
 # 	gcc ./main.o ./parser/parser.o ./translator/translator.o ./symbol/symbol.o -o assembler
 
-assembler: main parser hashtable translator
+assembler: main parser hashtable translator ./constants/hashtables-sourcefiles-paths.h
 	gcc ./main.o ./parser/parser.o ./hashtable/hashtable.o ./translator/translator.o -o assembler
 
 # quickly run manual tests with example file

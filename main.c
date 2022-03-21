@@ -1,6 +1,7 @@
 #include <stdio.h>
 //#include "./parser/parser.h"
 #include "./translator/translator.h"
+#include "./constants/hashtables-sourcefiles-paths.h"
 
 
 int main(int argc, char *argv[]) {
@@ -14,15 +15,8 @@ int main(int argc, char *argv[]) {
         get_next_line(file, &line);
     } while (line.current_line_metadata.line_type != END_OF_FILE);
 
-    // TODO: find a way to properly organize this constant
-    char* test[] = {
-        "./assets/instruction-sets/comp.json",
-        "./assets/instruction-sets/dest.json",
-        "./assets/instruction-sets/jump.json",
-        "./assets/instruction-sets/predefined-symbols.json",
-    };
     // test_insert_item();
-    translator * translator_instance = TRANSLATOR.constructor(test, sizeof(test)/ (sizeof (char*)));
+    translator * translator_instance = TRANSLATOR.constructor(HASHTABLES_SOURCEFILES_PATHS, sizeof(HASHTABLES_SOURCEFILES_PATHS)/ (sizeof (char*)));
 
     return 0;
 }

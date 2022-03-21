@@ -17,7 +17,7 @@ translator *constructor(char *filepaths[], int filepaths_count) {
     // TODO: turn this into a "parser_component" function/pseudo-method
     for (int path_index = 0; path_index < filepaths_count; path_index++){
         // use regex code to get name
-        table_name = strstr()
+        //table_name = strstr()
 
         // <PLACEHOLDER> ----use parser to open file
         // <PLACEHOLDER> ----use table manager (with malloc) to create table

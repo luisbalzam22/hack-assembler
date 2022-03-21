@@ -1,4 +1,4 @@
-#include "../common/hashtable-manager/hashtable-manager.h"
+#include "../hashtable/hashtable.h"
 #include "../parser/parser.h"
 
 typedef struct {
