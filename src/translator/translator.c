@@ -11,7 +11,7 @@
 translator *constructor(char *filepaths[], int filepaths_count) {
     
     translator *translator_instance = malloc(sizeof(*translator_instance) + (sizeof(char) * filepaths_count));
-    char table_name[30]; // TODO: see if it's necessary to leave it like that, or avoid specifying array size
+    char table_name[30]; // ! make this MF dynamic (mallock-it) and copy it to the pointer of the hashtable struct's table_type
     
     // translator_instance construye su instancia LUEGO de que ya hayan hashtables con longitud determinada disponibles para 
     // TODO: turn this into a "parser_component" function/pseudo-method
