@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "./hashtable.h"
+#include "../constants/exit-status-codes.h"
 
 
 // Takes search value (token), hash table, and the array size. Returns found item, or null
@@ -31,9 +32,8 @@ hash_item* insert_item(item_to_hash item, hash_table *table){
 
     if (array_item == NULL)
     {
-        hash_item *new_item = hash_item_constructor(item);
-        table->table[hash] = new_item;
-        return new_item;
+        table->table[hash] = hash_item_constructor(item);
+        return table->table[hash];
     }
     else {
         // "Jumping" from item to item on the ones that have the same hash, until we find the "tail"
@@ -43,10 +43,9 @@ hash_item* insert_item(item_to_hash item, hash_table *table){
 
         for (unsigned int index = 0; index < table->meta.size; index++) {
             if (table->table[index]->key == NULL){
-                hash_item *new_item = hash_item_constructor(item);
-                table->table[index] = new_item;
+                table->table[index] = hash_item_constructor(item);
                 array_item->next = index;
-                return new_item;
+                return table->table[index];
             }
         }
     }
@@ -173,14 +172,18 @@ hash_table *constructor(char *table_type, item_to_hash items_for_table[], unsign
     hash_table* table = (hash_table*)malloc(
     sizeof(hash_table)
     + (sizeof(hash_item*) * item_count) 
-    + (sizeof(char) * strlen(table_type)) // for the "type" metadata
+    // * For the "type" metadata. It avoids having to call malloc() more than once (here and later in the code)
+    + (sizeof(char) * strlen(table_type))
     );
 
     if (table != 0){
-        table->meta.size = item_count;
-        strcpy(table->meta.type, table_type);
         table->find_item = &find_item;
         table->insert_item = &insert_item;
+        table->meta.size = item_count;
+        strcpy(table->meta.type, table_type);
+        for (unsigned int index = 0; index < table->meta.size; index++){
+            table->table[index] = NULL;
+        }
         return table;
     }
     return NULL;
@@ -189,7 +192,7 @@ hash_table *constructor(char *table_type, item_to_hash items_for_table[], unsign
 char destructor(hash_table* table_to_delete){
     free(table_to_delete);
     if (table_to_delete == NULL){
-        return 1;
+        return SUCCESSFUL_EXIT_CODE;
     }
-    return -1;
+    return FAILED_EXIT_CODE;
 }

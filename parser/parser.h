@@ -32,8 +32,8 @@ typedef struct parser parser;
 typedef struct parser{
     parsed_line *line;
     FILE *current_file_pointer;
-    parsed_line (*get_next_line)(FILE *, parsed_line *);
-    FILE *(*open_file)(char[]);
+    FILE *(*open_file)(char[], parser *);
+    parsed_line *(*get_next_line)(parser *);
 } parser;
 
 typedef struct {
@@ -41,7 +41,8 @@ typedef struct {
     char (*destructor)(parser *);
 } parser_component;
 
-FILE* open_file(char file_path[]);
+FILE* open_file(char file_path[], parser *parser_instance);
+parsed_line *get_next_line(parser *parser_instance);
 
-parsed_line get_next_line(FILE *current_file_pointer, parsed_line *instruction);
-
+parsed_line *parsed_line_presetter(parsed_line *line);
+parsed_line *parsed_line_cleaner(parsed_line *line);

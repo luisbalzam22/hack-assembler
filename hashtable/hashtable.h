@@ -27,7 +27,7 @@ typedef struct hash_table {
 } hash_table;
 
 typedef struct {
-    hash_table *(*constructor)(hash_item* []);
+    hash_table *(*constructor)(item_to_hash [], unsigned int);
     char (*destructor)(hash_table*);
 } hashtable_component;
 
