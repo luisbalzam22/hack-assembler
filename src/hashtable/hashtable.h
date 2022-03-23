@@ -38,6 +38,7 @@ void test_find_item();
 void test_insert_item();
 
 // ! The table_items[] will come from a loop running on another function, which'll count the total elements and size them correctly
+// ? Change table_type for the ENUMS provided in the parser (instruction types)
 hash_table *constructor(char *table_type, item_to_hash items_for_table[], unsigned int item_count);
 char destructor(hash_table* table_to_delete);
 hash_item *hash_item_constructor(item_to_hash item);

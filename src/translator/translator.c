@@ -5,48 +5,62 @@
 #include <string.h>
 #include <stdlib.h>
 #include <regex.h>
+#include "../constants/exit-status-codes.h"
 #include "./translator.h"
 
+hash_table *add_table(hash_table *table_to_add, translator *translator_instance){
+    translator_instance->tables_length++;
+    translator_instance = realloc(translator_instance,sizeof(*translator_instance) + (sizeof(hash_table*) * translator_instance->tables_length));
+
+    if (translator_instance != NULL){
+        translator_instance->tables[translator_instance->tables_length - 1] = table_to_add;
+        return translator_instance->tables[translator_instance->tables_length - 1];
+    }
+    return NULL;
+}
+
 // Takes an array of filepaths to .json files, where each file will represent an instruction set, and therefore, a "hash table" to be constructed for the translator 
-translator *constructor(char *filepaths[], int filepaths_count) {
+translator *translator_constructor() {
     
-    translator *translator_instance = malloc(sizeof(*translator_instance) + (sizeof(char) * filepaths_count));
-    char table_name[30]; // ! make this MF dynamic (mallock-it) and copy it to the pointer of the hashtable struct's table_type
-    
-    // translator_instance construye su instancia LUEGO de que ya hayan hashtables con longitud determinada disponibles para 
-    // TODO: turn this into a "parser_component" function/pseudo-method
-    for (int path_index = 0; path_index < filepaths_count; path_index++){
-        // use regex code to get name
-        //table_name = strstr()
-
-        // <PLACEHOLDER> ----use parser to open file
-        // <PLACEHOLDER> ----use table manager (with malloc) to create table
-        // <PLACEHOLDER> ----add table to array of tables in translator struct
-        fprintf(stdout, "Path: %s", (*filepaths) + 50);
-    }
-    return translator_instance;
-    // takes the "table type" from the filename; pattern -> [^/.]$
-}
-
-char destructor(translator* this) {
     translator *translator_instance = malloc(sizeof(*translator_instance));
-
-    if (translator_instance != 0){
-
+    if (translator_instance != NULL) {
+        translator_instance->tables_length = 0;
+        return translator_instance;
     }
-    // takes the "table type" from the filename; pattern -> [^/.]$
+    fprintf(stdout, "Couldn't create new translator\n");
+    return NULL;
 }
 
-char* translate(parsed_line * instruction){
-    char * translation;
+char translator_destructor(translator *translator_to_delete) {
+    free(translator_to_delete->tables);
+    free(translator_to_delete);
+    if (translator_to_delete->tables == NULL && translator_to_delete == NULL)
+    {
+        return SUCCESSFUL_EXIT_CODE;
+    }
+    return FAILED_EXIT_CODE;
+}
 
-    if (instruction->current_line_metadata.line_type == A_INSTRUCTION){
+// * this function avoids having to create a hashtable for the other hashtables
+hash_table *find_table(parsed_line *instruction, translator *translator_instance){
+    for (int index = 0; index < translator_instance->tables_length; index++){
+        if (translator_instance->tables[index]->meta.type == instruction->meta.line_type) {
+            return translator_instance->tables[index];
+        }
+    }
+    return NULL;
+}
+
+char* translate(parsed_line *instruction){
+    char *translation;
+
+    if (instruction->meta.line_type == A_INSTRUCTION){
 
     }
-    if (instruction->current_line_metadata.line_type == C_INSTRUCTION){
+    if (instruction->meta.line_type == C_INSTRUCTION){
 
     }
-    if (instruction->current_line_metadata.line_type == LABEL){
+    if (instruction->meta.line_type == LABEL){
 
     }
 }

@@ -158,7 +158,7 @@ hash_item *hash_item_constructor(item_to_hash item){
         sizeof(*new_item)
         + (sizeof(char) * (strlen(item.key) + strlen(item.value)))
         );
-    if (new_item != 0){
+    if (new_item != NULL){
         new_item->key = item.key;
         new_item->value = item.value;
         new_item->next = END_OF_INDEX_REFERENCING;
@@ -167,7 +167,7 @@ hash_item *hash_item_constructor(item_to_hash item){
     fprintf(stdout, "Couldn't create item for key: %s\n", item.key);
     return NULL;
 }
-
+// ? Change table_type for the ENUMS provided in the parser (instruction types)
 hash_table *constructor(char *table_type, item_to_hash items_for_table[], unsigned int item_count){
     hash_table* table = (hash_table*)malloc(
     sizeof(hash_table)
@@ -176,7 +176,7 @@ hash_table *constructor(char *table_type, item_to_hash items_for_table[], unsign
     + (sizeof(char) * strlen(table_type))
     );
 
-    if (table != 0){
+    if (table != NULL){
         table->find_item = &find_item;
         table->insert_item = &insert_item;
         table->meta.size = item_count;

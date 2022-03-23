@@ -81,7 +81,7 @@ parsed_line *get_next_line(parser *parser_instance){
 
 parser *constructor(){
     parser *new_parser = malloc(sizeof(*new_parser));
-    if (new_parser != 0){
+    if (new_parser != NULL){
         new_parser->open_file = &open_file;
         new_parser->get_next_line = &get_next_line;
         new_parser->current_file_pointer = NULL;
@@ -125,7 +125,10 @@ parsed_line *parsed_line_cleaner(parsed_line *line){
     free(line->body.instruction_fields.jump);
 }
 
+
 char destructor(parser *parser_to_delete){
+    // in case we decide to destroy the parser before it has read its assigned file
+    parsed_line_cleaner(parser_to_delete->line);
     free(parser_to_delete);
     if (parser_to_delete == NULL){
         return SUCCESSFUL_EXIT_CODE;
