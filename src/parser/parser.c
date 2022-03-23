@@ -97,7 +97,7 @@ parser *constructor(){
 parsed_line *parsed_line_presetter(parsed_line *line){
     line->meta.line_number++;
 
-    // From 2nd instruction parsed & on
+    // from 2nd instruction parsed & on
     if (line->meta.line_number > 1){
         switch (line->meta.line_type) {
         case LABEL:

@@ -50,7 +50,7 @@ hash_item* insert_item(item_to_hash item, hash_table *table){
         }
     }
     fprintf(stdout, "Couldn' insert item for key: %s\n", item.key);
-    return NULL; // All the positions in the array are already occupied
+    return NULL; // all the positions in the array are already occupied
 }
 
 // void test_find_item(){
@@ -167,20 +167,18 @@ hash_item *hash_item_constructor(item_to_hash item){
     fprintf(stdout, "Couldn't create item for key: %s\n", item.key);
     return NULL;
 }
-// ? Change table_type for the ENUMS provided in the parser (instruction types)
-hash_table *constructor(char *table_type, item_to_hash items_for_table[], unsigned int item_count){
+
+hash_table *constructor(scanned_line_or_table_type table_type, item_to_hash items_for_table[], unsigned int item_count){
     hash_table* table = (hash_table*)malloc(
     sizeof(hash_table)
-    + (sizeof(hash_item*) * item_count) 
-    // * For the "type" metadata. It avoids having to call malloc() more than once (here and later in the code)
-    + (sizeof(char) * strlen(table_type))
+    + (sizeof(hash_item*) * item_count)
     );
 
     if (table != NULL){
         table->find_item = &find_item;
         table->insert_item = &insert_item;
         table->meta.size = item_count;
-        strcpy(table->meta.type, table_type);
+        table->meta.type = table_type;
         for (unsigned int index = 0; index < table->meta.size; index++){
             table->table[index] = NULL;
         }
