@@ -168,7 +168,7 @@ hash_item *hash_item_constructor(item_to_hash item){
     return NULL;
 }
 
-hash_table *constructor(scanned_line_or_table_type table_type, item_to_hash items_for_table[], unsigned int item_count){
+hash_table *hashtable_constructor(scanned_line_or_table_type table_type, item_to_hash items_for_table[], unsigned int item_count){
     hash_table* table = (hash_table*)malloc(
     sizeof(hash_table)
     + (sizeof(hash_item*) * item_count)
@@ -187,7 +187,7 @@ hash_table *constructor(scanned_line_or_table_type table_type, item_to_hash item
     return NULL;
 }
 
-char destructor(hash_table* table_to_delete){
+char hashtable_destructor(hash_table* table_to_delete){
     free(table_to_delete);
     if (table_to_delete == NULL){
         return SUCCESSFUL_EXIT_CODE;

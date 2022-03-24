@@ -79,7 +79,7 @@ parsed_line *get_next_line(parser *parser_instance){
     return parsed_line_cleaner(parser_instance->line);
 }
 
-parser *constructor(){
+parser *parser_constructor(){
     parser *new_parser = malloc(sizeof(*new_parser));
     if (new_parser != NULL){
         new_parser->open_file = &open_file;
@@ -126,7 +126,7 @@ parsed_line *parsed_line_cleaner(parsed_line *line){
 }
 
 
-char destructor(parser *parser_to_delete){
+char parser_destructor(parser *parser_to_delete){
     // in case we decide to destroy the parser before it has read its assigned file
     parsed_line_cleaner(parser_to_delete->line);
     free(parser_to_delete);
