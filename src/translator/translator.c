@@ -41,7 +41,8 @@ char translator_destructor(translator *translator_to_delete) {
     return FAILED_EXIT_CODE;
 }
 
-// * this function avoids having to create a hashtable for the other hashtables
+// This helper function avoids having to create a hashtable just to find the correct pointer to 
+// the hashtable where the translation'll come from
 hash_table *find_table(parsed_line *instruction, translator *translator_instance){
     for (int index = 0; index < translator_instance->tables_length; index++){
         if (translator_instance->tables[index]->meta.type == instruction->meta.line_type) {
@@ -51,16 +52,30 @@ hash_table *find_table(parsed_line *instruction, translator *translator_instance
     return NULL;
 }
 
-char* translate(parsed_line *instruction){
-    char *translation;
+char* translate(parsed_line *instruction, translator *translator_instance){
+    // It shouldn't be more than 100 characters long
+    char *translation = malloc(sizeof(char) * 100);
+    hash_table *respective_instruction_table = find_table(instruction ,translator_instance);
 
     if (instruction->meta.line_type == A_INSTRUCTION){
-
+        return respective_instruction_table->find_item(instruction->body.address, respective_instruction_table)->value;
     }
     if (instruction->meta.line_type == C_INSTRUCTION){
-
+        strcat(translation, respective_instruction_table->find_item(instruction->body.instruction_fields.dest, respective_instruction_table)->value);
+        strcat(translation, respective_instruction_table->find_item(instruction->body.instruction_fields.comp, respective_instruction_table)->value);
+        strcat(translation, respective_instruction_table->find_item(instruction->body.instruction_fields.jump, respective_instruction_table)->value);
+        return translation;
     }
     if (instruction->meta.line_type == LABEL){
-
+        return respective_instruction_table->find_item(instruction->body.label, respective_instruction_table)->value;
     }
+}
+
+//
+char release_memory_from_translation(char* translation){
+    free(translation);
+    if (translation == NULL){
+        return SUCCESSFUL_EXIT_CODE;
+    }
+    return FAILED_EXIT_CODE;
 }

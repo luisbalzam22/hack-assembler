@@ -4,4 +4,4 @@ typedef struct regex_match{
     unsigned int end_index;
 } regex_match;
 
-regex_match *match(char *string, char *patrn);
+regex_match *regex_matcher (char *string, char *patrn);

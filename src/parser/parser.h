@@ -1,14 +1,11 @@
 // ? move this enum to its own "constants" file
-typedef enum {
-    LABEL,
-    A_INSTRUCTION,
-    C_INSTRUCTION,
-    END_OF_FILE
-} scanned_line_or_table_type;
+#include "../interfaces/scanned-line-type.h"
+#ifndef PARSER_H
+#define PARSER_H
 
 typedef struct {
     unsigned int line_number;
-    scanned_line_or_table_type line_type;
+    scanned_line_type line_type;
 } line_metadata;
 
 typedef struct {
@@ -37,12 +34,17 @@ typedef struct parser{
 } parser;
 
 typedef struct {
-    parser *(*constructor)();
-    char (*destructor)(parser *);
+    parser *(*parser_constructor)();
+    char (*parser_destructor)(parser *);
 } parser_component;
+
 
 FILE* open_file(char file_path[], parser *parser_instance);
 parsed_line *get_next_line(parser *parser_instance);
 
+parser *parser_constructor();
+char parser_destructor(parser *parser_to_delete);
+
 parsed_line *parsed_line_presetter(parsed_line *line);
 parsed_line *parsed_line_cleaner(parsed_line *line);
+#endif

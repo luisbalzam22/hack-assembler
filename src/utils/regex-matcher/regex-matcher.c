@@ -5,7 +5,7 @@
 #include "./regex-matcher.h"
 
  
-regex_match *match (char *string, char *patrn) {
+regex_match *regex_matcher (char *string, char *patrn) {
         unsigned int begin;
         unsigned int end;
         int i, w = 0, len;
@@ -32,9 +32,9 @@ regex_match *match (char *string, char *patrn) {
 }
  
  
-int main() {
-    char value[] = "this and7 that";
-    regex_match *matched=match(value,"[a-z]+[0-9]");
-    //printf("->%s<-\n(a=%d b=%d\nStart:%c\nEnd:%c)\n",matched,a,b,value[5], value[8]);
-    return 0;
-}
+// int main() {
+//     char value[] = "this and7 that";
+//     regex_match *matched=match(value,"[a-z]+[0-9]");
+       //printf("->%s<-\n(a=%d b=%d\nStart:%c\nEnd:%c)\n",matched,a,b,value[5], value[8]);
+//     return 0;
+// }
