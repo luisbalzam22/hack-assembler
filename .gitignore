@@ -3,3 +3,6 @@
 
 # Pre-compiled header files
 *.h.gch
+
+# .orig filez
+*.orig
