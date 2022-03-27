@@ -9,15 +9,23 @@
 item_to_hash_table *extract_items(char file_path[]) {
     char key_val_token[500]; // TODO: find a way to improve this
     FILE* input_stream = file_opener(file_path);
-    fprintf(stdout, "WORKING CHECKPOINT");
     item_to_hash_table *items = malloc(sizeof(item_to_hash_table));
     items->size = 0;
     int current_scan;
     if(input_stream != NULL){
         // ! <<DEBUG>>
-        while(!(current_scan = fscanf(input_stream, "%499[\"].+[\"]:[\"][0-1]+[\"]", key_val_token)) && current_scan != EOF){
-            items = realloc(items, sizeof(item_to_hash_table) + (sizeof(item_to_hash) * items->size));
-            items->size++;
+        int count = 0;
+        while(current_scan != EOF){
+            count++;
+            // TODO: fix problem of not scanning to next line & on
+            //current_scan = fscanf(input_stream, "%499[\"].+[\"]:[\"][0-1]+[\"]\n", key_val_token);
+            current_scan = fscanf(input_stream, "%499[ {\n]+\n", key_val_token);
+            current_scan = fscanf(input_stream, "%499[\"a-zA-Z0-9:-]+ *\n", key_val_token);
+            current_scan = fscanf(input_stream, "%499[^\" ]+,", key_val_token);
+            //printf("Current_scan: %d\n", current_scan);
+            printf("String: %s\n", key_val_token);
+            // items = realloc(items, sizeof(item_to_hash_table) + (sizeof(item_to_hash) * items->size));
+            // items->size++;
         }
         return items;
     }
@@ -27,7 +35,7 @@ item_to_hash_table *extract_items(char file_path[]) {
 // PRIVATE: opens a file from a specified path and returns a pointer to the opened file's stream
 FILE *file_opener(char file_path[]) {
     char error_message[50];
-    FILE* input_stream = malloc(sizeof(FILE*));
+    FILE* input_stream;
 
     // TODO: move the ".json" string to a constant, that'll make it more scalable
     if (!strcmp(".json", regex_matcher(file_path, ".[a-zA-Z0-9]+$")->matched_substr)){
@@ -40,7 +48,7 @@ FILE *file_opener(char file_path[]) {
     else{
         strcpy(error_message, "Provided file is not a .json file");
     }
-    fprintf(stderr, "Can't open file at filepath: %s\nErr:%s\n", file_path, error_message);
+    fprintf(stderr, "Can't open file at filepath: %s\nErr:%s", file_path, error_message);
     return NULL;
 }
 
